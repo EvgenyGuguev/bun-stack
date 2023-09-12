@@ -2,14 +2,20 @@
   "name": "bun-stack",
   "version": "1.0.50",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun run --watch src/index.ts",
+    "db:generate": "bun drizzle-kit generate:pg",
+    "db:migrate": "bun db/migrate.ts",
+    "db:studio": "bun drizzle-kit studio"
   },
   "dependencies": {
-    "elysia": "latest"
+    "@types/pg": "^8.10.2",
+    "drizzle-orm": "^0.28.6",
+    "elysia": "latest",
+    "pg": "^8.11.3"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "drizzle-kit": "^0.19.13"
   },
   "module": "src/index.js"
 }

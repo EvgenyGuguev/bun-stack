@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: postgres:15.4-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: adminadmin
+      POSTGRES_DB: bun-db
+    volumes:
+      - bun-db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+volumes:
+  bun-db:
