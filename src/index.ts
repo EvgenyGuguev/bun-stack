@@ -1,21 +1,16 @@
 import { Elysia } from "elysia";
-import { db } from "../db";
-import { sql } from "drizzle-orm";
-import { users, User } from "../db/schema";
+import { html } from '@elysiajs/html'
+import { UsersList } from "./main/views/UsersList";
+import { HomePage } from "./main/views/Home";
 
-const app = new Elysia();
+const app = new Elysia()
+    .use(html)
+    .get("/styles.css", () => Bun.file("./src/main/styles/output-tailwind.css"));
 
-app.get("/", () => Bun.env.DB_URL!);
-  
+app.get("/",  HomePage);
+app.get("/users",  UsersList);
+
 
 // await db.insert(users).values({name: 'Test1', email: 'test1@mail.ru'});
 
-const usersQuery = await db.execute(sql`select * from ${users}`);
-const usersArr: User[] = usersQuery.rows;
-console.log(usersArr)
-
 app.listen(3000);
-
-console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-);

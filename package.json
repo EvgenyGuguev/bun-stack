@@ -5,9 +5,12 @@
     "dev": "bun run --watch src/index.ts",
     "db:generate": "bun drizzle-kit generate:pg",
     "db:migrate": "bun db/migrate.ts",
-    "db:studio": "bun drizzle-kit studio"
+    "db:studio": "bun drizzle-kit studio",
+    "tw": "bunx tailwindcss -i ./src/main/styles/input-tailwind.css -o ./src/main/styles/output-tailwind.css",
+    "tw:dev": "bunx tailwindcss -i ./src/main/styles/input-tailwind.css -o ./src/main/styles/output-tailwind.css --watch"
   },
   "dependencies": {
+    "@elysiajs/html": "^0.6.5",
     "@types/pg": "^8.10.2",
     "drizzle-orm": "^0.28.6",
     "elysia": "latest",
