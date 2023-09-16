@@ -1,9 +1,11 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 import { html } from '@elysiajs/html'
 import { UsersList } from "./main/views/UsersList";
 import { HomePage } from "./main/views/Home";
 import { cookie } from '@elysiajs/cookie'
 import { jwt } from '@elysiajs/jwt'
+import {Profile} from "./auth/views/Profile";
+import { LoginPage } from "./auth/views/Login";
 
 /*
 TODO:
@@ -20,23 +22,19 @@ const app = new Elysia()
         })
     )
     .use(cookie())
-    .get('/sign/:name', async ({ jwt, cookie, setCookie, params }) => {
-        setCookie('auth', await jwt.sign(params), {
+    .post('/sign', async ({ jwt, cookie, setCookie, body }) => {
+        setCookie('auth', await jwt.sign({...body}), {
             httpOnly: true,
             maxAge: 7 * 86400,
         })
-
-        return `Sign in as ${cookie.auth}`
+        return 'Success!';
+    }, {
+        body: t.Object({
+            username: t.String(),
+        })
     })
     .get('/profile', async ({ jwt, set, cookie: { auth } }) => {
-        const profile = await jwt.verify(auth)
-
-        if (!profile) {
-            set.status = 401
-            return 'Unauthorized'
-        }
-
-        return `Hello ${profile.name}`
+        return Profile(jwt, set, auth);
     })
     .get('/logout', ({ cookie, setCookie }) => {
         setCookie('auth', '', {
@@ -46,6 +44,7 @@ const app = new Elysia()
     .get("/styles.css", () => Bun.file("./src/main/styles/output-tailwind.css"));
 
 app.get("/",  HomePage);
+app.get("/login",  LoginPage);
 app.get("/users",  UsersList);
 
 
