@@ -9,6 +9,7 @@ import {LoginPage} from "./auth/views/Login";
 import {db} from "../db";
 import {RegisterPage} from "./auth/views/Register";
 import {users} from "../db/schema";
+import {sql} from "drizzle-orm";
 
 /*
 TODO:
@@ -36,19 +37,29 @@ app.post('/register', async ({body}) => {
         email: t.String(),
         password: t.String(),
     })
-})
+});
+app.get("/register", RegisterPage);
 
 app.post('/sign', async ({jwt, cookie, setCookie, body}) => {
-    setCookie('auth', await jwt.sign({...body}), {
-        httpOnly: true,
-        maxAge: 7 * 86400,
-    })
-    return 'Success!';
+    const user = await db.execute(sql`select * from ${users} where ${users.email} = ${body.email}`);
+
+    if (user.rows.length) {
+        setCookie('auth', await jwt.sign({email: body.email}), {
+            httpOnly: true,
+            maxAge: 7 * 86400,
+        })
+        return 'Success!';
+    } else {
+        return 'User not found!'
+    }
+
 }, {
     body: t.Object({
-        name: t.String(),
+        email: t.String(),
+        password: t.String(),
     })
 });
+app.get("/login", LoginPage);
 
 app.get('/profile', async ({jwt, set, cookie: {auth}}) =>
     Profile(jwt, set, auth)
@@ -62,9 +73,7 @@ app.get('/logout', ({cookie, setCookie}) => {
 });
 
 app.get("/", HomePage);
-app.get("/register-page", RegisterPage);
-app.get("/login-page", LoginPage);
-app.get("/users-page", () => UsersList(db));
+app.get("/users", () => UsersList(db));
 
 
 // await db.insert(users).values({name: 'Test1', email: 'test1@mail.ru'});
