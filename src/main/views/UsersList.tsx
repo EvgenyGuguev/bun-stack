@@ -1,9 +1,9 @@
 import {sql} from "drizzle-orm";
 import {User, users} from "../../../db/schema";
 import {BaseHtml} from "../layouts/BaseHtml";
-import {db} from "../../../db";
+import {NodePgDatabase} from "drizzle-orm/node-postgres";
 
-export const UsersList = async () => {
+export const UsersList = async (db: NodePgDatabase) => {
     const usersQuery = await db.execute(sql`select * from ${users}`);
     const usersArr: User[] = usersQuery.rows;
     return BaseHtml(
