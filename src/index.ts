@@ -8,7 +8,7 @@ import {Profile} from "./auth/views/Profile";
 import {LoginPage} from "./auth/views/Login";
 import {db} from "../db";
 import {RegisterPage} from "./auth/views/Register";
-import {users} from "../db/schema";
+import {User, users} from "../db/schema";
 import {sql} from "drizzle-orm";
 
 /*
@@ -41,14 +41,15 @@ app.post('/register', async ({body}) => {
 app.get("/register", RegisterPage);
 
 app.post('/sign', async ({jwt, cookie, setCookie, body}) => {
-    const user = await db.execute(sql`select * from ${users} where ${users.email} = ${body.email}`);
+    const query = await db.execute(sql`select * from ${users} where ${users.email} = ${body.email}`);
+    const user: User|undefined = query.rows[0];
 
-    if (user.rows.length) {
+    if (user) {
         setCookie('auth', await jwt.sign({email: body.email}), {
             httpOnly: true,
             maxAge: 7 * 86400,
         })
-        return 'Success!';
+        return `Success! You are logged in as ${body.email}`;
     } else {
         return 'User not found!'
     }
