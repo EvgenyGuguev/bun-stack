@@ -11,8 +11,9 @@ export const BaseHtml = (content: any) => (
     <body class="flex flex-col w-full h-screen items-center">
         <header class="flex" hx-boost="true">
             <a href="/" class="mr-4">Go Home</a>
-            <a href="/login" class="mr-4">Login</a>
-            <a href="/users" class="mr-4">Users List</a>
+            <a href="/login-page" class="mr-4">Login</a>
+            <a href="/register-page" class="mr-4">Register</a>
+            <a href="/users-page" class="mr-4">Users List</a>
             <a href="/profile" class="mr-4">Profile</a>
         </header>
         { content }

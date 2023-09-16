@@ -8,7 +8,7 @@ export const LoginPage = () => {
             hx-target="this"
             _="on submit target.reset()"
         >
-            <input type="text" name="username" class="border border-black" />
+            <input type="text" name="name" class="border border-black" />
             <button type="submit">Log In</button>
         </form>
     )
