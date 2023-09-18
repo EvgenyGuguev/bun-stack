@@ -14,7 +14,7 @@ import {sql} from "drizzle-orm";
 /*
 TODO:
 - регистрация
-- страницы регистрации, входа, выхода, информации о пользователе
+- страницы выхода, информации о пользователе
  */
 
 const app = new Elysia()
@@ -26,7 +26,7 @@ const app = new Elysia()
         })
     )
     .use(cookie())
-    .get("/styles.css", () => Bun.file("./src/main/styles/output-tailwind.css"));
+    .get("/styles.css", () => new Response(Bun.file("./src/main/styles/output-tailwind.css")));
 
 app.post('/register', async ({body}) => {
     await db.insert(users).values({...body});
@@ -75,8 +75,5 @@ app.get('/logout', ({cookie, setCookie}) => {
 
 app.get("/", HomePage);
 app.get("/users", () => UsersList(db));
-
-
-// await db.insert(users).values({name: 'Test1', email: 'test1@mail.ru'});
 
 app.listen(3000);

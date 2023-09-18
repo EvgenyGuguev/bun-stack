@@ -1,4 +1,4 @@
-export const BaseHtml = (content: any) => (
+export const BaseHtml = (content: string) => (
 <html lang="ru">
     <head>
         <meta charset="UTF-8" />
