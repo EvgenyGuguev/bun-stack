@@ -10,7 +10,6 @@
     "tw:dev": "bunx tailwindcss -i ./src/main/styles/input-tailwind.css -o ./src/main/styles/output-tailwind.css --watch"
   },
   "dependencies": {
-    "@elysiajs/cookie": "^0.7.0",
     "@elysiajs/html": "^0.7.0",
     "@elysiajs/jwt": "^0.7.0",
     "@elysiajs/static": "^0.7.0",

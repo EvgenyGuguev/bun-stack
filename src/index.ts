@@ -2,7 +2,6 @@ import {Elysia, t} from "elysia";
 import {html} from '@elysiajs/html'
 import {UsersList} from "./main/views/UsersList";
 import {HomePage} from "./main/views/Home";
-import {cookie} from '@elysiajs/cookie'
 import {jwt} from '@elysiajs/jwt'
 import {Profile} from "./auth/views/Profile";
 import {LoginPage} from "./auth/views/Login";
@@ -10,12 +9,6 @@ import {connection} from "../db";
 import {RegisterPage} from "./auth/views/Register";
 import {User, users} from "../db/schema";
 import {sql} from "drizzle-orm";
-
-/*
-TODO:
-- регистрация
-- страницы выхода, информации о пользователе
- */
 
 const app = new Elysia()
     .use(html())
@@ -25,7 +18,6 @@ const app = new Elysia()
             secret: 'secret'
         })
     )
-    .use(cookie())
     .decorate('db', connection)
     .get("/styles.css", () => Bun.file("./src/main/styles/output-tailwind.css"));
 
@@ -41,15 +33,14 @@ app.post('/register', async ({body, db}) => {
 });
 app.get("/register", RegisterPage);
 
-app.post('/sign', async ({jwt, cookie, setCookie, body, db}) => {
+app.post('/sign', async ({jwt, cookie, cookie: {auth}, body, db}) => {
     const query = await db.execute(sql`select * from ${users} where ${users.email} = ${body.email}`);
     const user: User|undefined = query.rows[0];
 
     if (user) {
-        setCookie('auth', await jwt.sign({email: body.email}), {
-            httpOnly: true,
-            maxAge: 7 * 86400,
-        })
+        auth.value = await jwt.sign({email: body.email});
+        auth.httpOnly = true;
+        auth.maxAge = 7 * 86400;
         return `Success! You are logged in as ${body.email}`;
     } else {
         return 'User not found!'
@@ -64,13 +55,12 @@ app.post('/sign', async ({jwt, cookie, setCookie, body, db}) => {
 app.get("/login", LoginPage);
 
 app.get('/profile', async ({jwt, set, cookie: {auth}}) =>
-    Profile(jwt, set, auth)
+    Profile(jwt, set, auth.value)
 );
 
-app.get('/logout', ({cookie, setCookie}) => {
-    setCookie('auth', '', {
-        maxAge: 0,
-    })
+app.get('/logout', ({cookie: {auth}}) => {
+    auth.value = '';
+    auth.maxAge = 0;
     return 'You are logged out!';
 });
 
