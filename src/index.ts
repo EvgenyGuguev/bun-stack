@@ -6,7 +6,7 @@ import {cookie} from '@elysiajs/cookie'
 import {jwt} from '@elysiajs/jwt'
 import {Profile} from "./auth/views/Profile";
 import {LoginPage} from "./auth/views/Login";
-import {db} from "../db";
+import {connection} from "../db";
 import {RegisterPage} from "./auth/views/Register";
 import {User, users} from "../db/schema";
 import {sql} from "drizzle-orm";
@@ -18,7 +18,7 @@ TODO:
  */
 
 const app = new Elysia()
-    .use(html)
+    .use(html())
     .use(
         jwt({
             name: 'jwt',
@@ -26,9 +26,10 @@ const app = new Elysia()
         })
     )
     .use(cookie())
-    .get("/styles.css", () => new Response(Bun.file("./src/main/styles/output-tailwind.css")));
+    .decorate('db', connection)
+    .get("/styles.css", () => Bun.file("./src/main/styles/output-tailwind.css"));
 
-app.post('/register', async ({body}) => {
+app.post('/register', async ({body, db}) => {
     await db.insert(users).values({...body});
     return 'Register success!';
 }, {
@@ -40,7 +41,7 @@ app.post('/register', async ({body}) => {
 });
 app.get("/register", RegisterPage);
 
-app.post('/sign', async ({jwt, cookie, setCookie, body}) => {
+app.post('/sign', async ({jwt, cookie, setCookie, body, db}) => {
     const query = await db.execute(sql`select * from ${users} where ${users.email} = ${body.email}`);
     const user: User|undefined = query.rows[0];
 
@@ -74,6 +75,6 @@ app.get('/logout', ({cookie, setCookie}) => {
 });
 
 app.get("/", HomePage);
-app.get("/users", () => UsersList(db));
+app.get("/users", ({db}) => UsersList(db));
 
 app.listen(3000);
