@@ -12,12 +12,12 @@
   "dependencies": {
     "@elysiajs/html": "^0.7.0",
     "@elysiajs/jwt": "^0.7.0",
-    "@elysiajs/static": "^0.7.0",
-    "@kitajs/html": "^2.2.2",
-    "@kitajs/ts-html-plugin": "^1.0.2",
-    "@types/pg": "^8.10.2",
+    "@elysiajs/static": "^0.7.1",
+    "@kitajs/html": "^3.0.0",
+    "@kitajs/ts-html-plugin": "^1.1.1",
+    "@types/pg": "^8.10.3",
     "drizzle-orm": "^0.28.6",
-    "elysia": "^0.7.2",
+    "elysia": "^0.7.15",
     "pg": "^8.11.3"
   },
   "devDependencies": {

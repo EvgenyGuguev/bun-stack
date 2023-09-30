@@ -22,7 +22,8 @@ const app = new Elysia()
     .get("/styles.css", () => Bun.file("./src/main/styles/output-tailwind.css"));
 
 app.post('/register', async ({body, db}) => {
-    await db.insert(users).values({...body});
+    // await db.insert(users).values({...body});
+    await db.execute(sql`insert into users (name, email, password) values (${body.name}, ${body.email}, ${body.password})`);
     return 'Register success!';
 }, {
     body: t.Object({
@@ -33,7 +34,7 @@ app.post('/register', async ({body, db}) => {
 });
 app.get("/register", RegisterPage);
 
-app.post('/sign', async ({jwt, cookie, cookie: {auth}, body, db}) => {
+app.post('/sign', async ({jwt, cookie: {auth}, body, db}) => {
     const query = await db.execute(sql`select * from ${users} where ${users.email} = ${body.email}`);
     const user: User|undefined = query.rows[0];
 
