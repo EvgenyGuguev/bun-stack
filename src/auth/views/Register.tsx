@@ -5,7 +5,7 @@ export const RegisterPage = () => {
         <div class="min-h-screen flex items-center justify-center">
             <div class="bg-white p-8 rounded shadow-md w-96">
                 <h2 class="text-2xl font-bold mb-6">Register</h2>
-                <form class="max-w-sm mx-auto" hx-post="/register" hx-target="this">
+                <form class="max-w-sm mx-auto" hx-post="/auth/register" hx-target="this">
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
                             Name

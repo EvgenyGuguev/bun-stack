@@ -7,7 +7,7 @@ export const Profile = async (jwt: any, set: any, auth: string) => {
         profile ?
             <div id="profile">
                 <h1>Hello {profile.email}</h1>
-                <button hx-get="/logout" hx-target="#profile">logout</button>
+                <button hx-get="/auth/logout" hx-target="#profile">logout</button>
             </div>
             : <h1>Unauthorized</h1>
     );

@@ -5,7 +5,7 @@ export const LoginPage = () => {
         <div class="min-h-screen flex items-center justify-center" >
             <div class="bg-white p-8 rounded shadow-md w-96">
                 <h2 class="text-2xl font-bold mb-6">Login</h2>
-                <form class="space-y-4" hx-post="/sign" hx-target="this">
+                <form class="space-y-4" hx-post="/auth/sign" hx-target="this">
                     <div>
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
                         <input
