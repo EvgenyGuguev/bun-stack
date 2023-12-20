@@ -1,8 +1,8 @@
 import { migrate } from "drizzle-orm/node-postgres/migrator";
-import { db } from ".";
+import { connection } from ".";
 
 // this will automatically run needed migrations on the database
-migrate(db, { migrationsFolder: "./db/migrations" })
+migrate(connection, { migrationsFolder: "./db/migrations" })
   .then(() => {
     console.log("Migrations complete!");
     process.exit(0);
